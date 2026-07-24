@@ -213,6 +213,29 @@
     font-size:14px;
   }
   .card .brand b{color:var(--paper); font-weight:700;}
+  .card .rating{
+    margin-top:10px;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:13px;
+    color:var(--turmeric);
+    font-weight:700;
+  }
+  .card .rating span{color:var(--muted); font-weight:400;}
+  .map-link{
+    display:inline-block;
+    margin-top:16px;
+    background:var(--guava);
+    color:#2b0f16;
+    text-decoration:none;
+    font-weight:700;
+    font-size:13px;
+    padding:10px 20px;
+    border-radius:999px;
+    transition:transform .15s, background .2s;
+  }
+  .map-link:hover{background:#ff7c8d; transform:translateY(-1px);}
 
   .actions{
     margin-top:22px;
@@ -250,7 +273,7 @@
 
   <div class="eyebrow">Dinner Decision Machine</div>
   <h1>今晚吃<span>什麼</span>？</h1>
-  <div class="sub">轉一下，交給緣分決定 — 已收錄各國料理與連鎖品牌</div>
+  <div class="sub">轉一下，交給緣分決定 — 已收錄信義區周邊 37 間真實餐廳，涵蓋 10+ 種料理</div>
 
   <div class="machine-wrap">
     <div class="dome" id="dome">
@@ -276,7 +299,10 @@
     <span class="flag" id="cardFlag">🍜</span>
     <div class="tag" id="cardTag">JAPAN · 日式</div>
     <div class="dish" id="cardDish">豚骨拉麵</div>
-    <div class="brand" id="cardBrand">推薦品牌：<b>一風堂</b></div>
+    <div class="brand" id="cardBrand">推薦餐廳：<b>一風堂</b></div>
+    <div class="rating" id="cardRating">⭐ 4.8 <span>· 信義區</span></div>
+    <br>
+    <a class="map-link" id="cardMap" href="#" target="_blank" rel="noopener">在地圖上查看</a>
   </div>
 
   <div class="actions" id="actions" style="display:none;">
@@ -286,33 +312,45 @@
   <div class="hint">小提醒：扭到不喜歡的可以「再轉一次」，但只限一次唷 — 緣分只給你兩次機會 😄</div>
 
 <script>
+// 信義區真實餐廳清單（資料取自 Google 地圖，含評分）
 const pool = [
-  {flag:'🍜', tag:'JAPAN · 日式', dish:'豚骨拉麵', brand:'一風堂 / 豚王'},
-  {flag:'🍣', tag:'JAPAN · 日式', dish:'迴轉壽司', brand:'爭鮮 / 壽司郎'},
-  {flag:'🍱', tag:'JAPAN · 日式', dish:'燒肉定食', brand:'安安 / 乾杯'},
-  {flag:'🍚', tag:'JAPAN · 日式', dish:'炸豬排丼飯', brand:'大戶屋'},
-  {flag:'🍗', tag:'KOREA · 韓式', dish:'韓式炸雞配啤酒', brand:'bb.q / 起家雞'},
-  {flag:'🍲', tag:'KOREA · 韓式', dish:'部隊鍋', brand:'涓豆腐 / 8色韓炒'},
-  {flag:'🥢', tag:'KOREA · 韓式', dish:'石鍋拌飯', brand:'本家'},
-  {flag:'🍔', tag:'USA · 美式', dish:'手作漢堡', brand:'摩斯漢堡 / Shake Shack'},
-  {flag:'🍟', tag:'USA · 美式', dish:'炸雞全餐', brand:'肯德基'},
-  {flag:'🥩', tag:'USA · 美式', dish:'牛排', brand:'貴族世家 / 王品'},
-  {flag:'🍕', tag:'ITALY · 義式', dish:'手工披薩', brand:'達美樂 / Pizza Hut'},
-  {flag:'🍝', tag:'ITALY · 義式', dish:'奶油培根義大利麵', brand:'Pizza Marzano'},
-  {flag:'🥟', tag:'TAIWAN/CN · 中式', dish:'小籠包套餐', brand:'鼎泰豐'},
-  {flag:'🍜', tag:'TAIWAN · 台式', dish:'紅燒牛肉麵', brand:'老擔牛肉麵'},
-  {flag:'🍛', tag:'TAIWAN · 台式', dish:'滷肉飯配黑白切', brand:'金峰 / 三commix'},
-  {flag:'🍢', tag:'TAIWAN · 台式', dish:'鹽酥雞拼盤', brand:'巷口鹽酥雞攤'},
-  {flag:'🥘', tag:'TAIWAN · 台式', dish:'薑母鴨火鍋', brand:'薑母鴨專賣店'},
-  {flag:'🍲', tag:'CHINA · 港澳', dish:'燒臘飯', brand:'再興 / 阿新'},
-  {flag:'🍲', tag:'CHINA · 川式', dish:'麻辣鍋', brand:'海底撈 / 呷哺呷哺'},
-  {flag:'🌶️', tag:'THAILAND · 泰式', dish:'打拋豬配蛋', brand:'瓦城'},
-  {flag:'🍛', tag:'THAILAND · 泰式', dish:'綠咖哩雞', brand:'發現曼谷'},
-  {flag:'🌮', tag:'MEXICO · 墨西哥', dish:'塔可拼盤', brand:'Tacos & Co.'},
-  {flag:'🍛', tag:'INDIA · 印度', dish:'咖哩配烤餅', brand:'先鋒印度廚房'},
-  {flag:'🍜', tag:'VIETNAM · 越式', dish:'牛肉河粉', brand:'Pho 24'},
-  {flag:'🥗', tag:'HEALTHY · 輕食', dish:'雞胸沙拉碗', brand:'Subway / 樂沙'},
-  {flag:'🍞', tag:'FRANCE · 法式', dish:'可頌早午餐', brand:'Miacucina'},
+  {flag:'🍣', tag:'JAPAN · 日式', dish:'日式定食 / 生魚片', brand:'香旺日式料理', rating:4.9, pid:'ChIJw71Ql6GrQjQRA3EcFJqUTUI'},
+  {flag:'🍣', tag:'JAPAN · 日式', dish:'新鮮生魚片丼飯', brand:'魚躍日式料理 北醫店', rating:4.8, pid:'ChIJ3TgUKLWrQjQRdyNCbtxTnVM'},
+  {flag:'🍣', tag:'JAPAN · 日式', dish:'握壽司 / 生魚片丼', brand:'林居sushi 永吉店', rating:4.8, pid:'ChIJZSnJbYWrQjQRl8oNo7MZKg0'},
+  {flag:'🥩', tag:'JAPAN · 日式', dish:'燒肉牛丼', brand:'GYUU NIKU ステーキ専門店', rating:4.6, pid:'ChIJhxtvkqOrQjQRbbpjh4uldU8'},
+  {flag:'🍲', tag:'JAPAN · 日式', dish:'涮涮鍋', brand:'食令shabu', rating:4.7, pid:'ChIJEbkgt6urQjQReBGcJ4HRG2Y'},
+  {flag:'🍛', tag:'JAPAN · 日式咖哩', dish:'炸豬排咖哩飯', brand:'羅本家咖哩 信義店', rating:4.9, pid:'ChIJaQ1CwlSrQjQRorOr1NX638w'},
+  {flag:'🍛', tag:'JAPAN · 日式咖哩', dish:'唐揚雞咖哩飯', brand:'Curry For Peace', rating:4.7, pid:'ChIJdbSSOMqrQjQRJA2KtQ4zaSE'},
+  {flag:'🍖', tag:'KOREA · 韓式', dish:'鐵板炭火烤肉', brand:'梨谷 信義ATT店', rating:4.9, pid:'ChIJBe6eg9GrQjQRpnCTKzSCU14'},
+  {flag:'🍗', tag:'KOREA · 韓式', dish:'韓式燉雞 / 起司炒年糕', brand:'Twozzim 韓國燉雞', rating:4.9, pid:'ChIJJ4zWvACrQjQRfklXErrIHi0'},
+  {flag:'🥘', tag:'KOREA · 韓式', dish:'部隊鍋 / 海鮮煎餅', brand:'Igok', rating:4.7, pid:'ChIJeahVgUSrQjQRBv_WbkHfDRU'},
+  {flag:'🍷', tag:'KOREA · 韓式餐酒', dish:'戰斧牛排 / 炸生蠔', brand:'ANJU 新韓式餐酒館', rating:4.8, pid:'ChIJ9YCjk8WrQjQRav282G5Ttbc'},
+  {flag:'🍔', tag:'USA · 美式漢堡', dish:'手工牛肉漢堡', brand:'Awesome Burger', rating:4.7, pid:'ChIJoeYaSrmrQjQRl7CUbo2Pluc'},
+  {flag:'🍗', tag:'USA · 美式漢堡', dish:'炸雞漢堡配鬆餅', brand:'BURGER OUT', rating:4.6, pid:'ChIJAytZQDirQjQRgE8YUFmgaMY'},
+  {flag:'🍔', tag:'USA · 美式漢堡', dish:'經典起司漢堡', brand:"Lin's Burger", rating:4.5, pid:'ChIJZWIJ8WirQjQRlgqCl4LX-tI'},
+  {flag:'🍔', tag:'USA · 美式漢堡', dish:'炭烤厚切漢堡', brand:'BURNT BURGER SOCIAL CLUB', rating:4.4, pid:'ChIJzYnsPQCrQjQRtxhA1aMxwDo'},
+  {flag:'🍕', tag:'ITALY · 義式披薩', dish:'拿坡里手工披薩', brand:'披薩3次方', rating:4.7, pid:'ChIJc2bzzPCrQjQRLbtiNwu4-Rg'},
+  {flag:'🍕', tag:'ITALY · 義式披薩', dish:'拿坡里披薩 / 燉飯', brand:'Salto Pizzeria Napoletana', rating:4.3, pid:'ChIJfUVrPMarQjQRmQ87n-OVulo'},
+  {flag:'🍝', tag:'ITALY · 義式麵食', dish:'奶油培根義大利麵', brand:'Lazy Pasta 慵懶義式廚房', rating:4.6, pid:'ChIJ0_vBimarQjQRaWXEDcDd5qw'},
+  {flag:'🍝', tag:'ITALY · 義式', dish:'川味海鮮義大利麵', brand:'Cin Cin Osteria', rating:4.3, pid:'ChIJW9eMArmrQjQRu01QlV9Ome8'},
+  {flag:'🍚', tag:'TAIWAN · 台式', dish:'滷肉飯 / 竹筍排骨湯', brand:'春發號滷肉飯', rating:4.4, pid:'ChIJi255bOmrQjQRI_ZZTaozvF8'},
+  {flag:'🍜', tag:'TAIWAN · 台式', dish:'米粉湯 / 黑白切', brand:'胡桃台灣傳統料理', rating:4.1, pid:'ChIJn0NuUkSrQjQRpeSLg5Ukk8w'},
+  {flag:'🧊', tag:'TAIWAN · 台式小吃', dish:'臭豆腐 / 米血糕', brand:'正純小吃店', rating:4.6, pid:'ChIJmWcpDaqrQjQRBZRq3SnVGGo'},
+  {flag:'🥟', tag:'TAIWAN · 台菜', dish:'古早味台菜合菜', brand:'欣葉台菜 信義店', rating:4.2, pid:'ChIJrSZypLCrQjQRdNWuZqKdwqM'},
+  {flag:'🍲', tag:'HOTPOT · 麻辣鍋', dish:'麻辣鴛鴦鍋', brand:'鼎王麻辣鍋 信義ATT店', rating:4.9, pid:'ChIJ9xwg64KrQjQRW-tRk67LjRA'},
+  {flag:'🍲', tag:'HOTPOT · 養生鍋', dish:'無老鍋 藥膳湯底', brand:'無老鍋 Wulao 信義', rating:4.9, pid:'ChIJqaDWsIqrQjQR08MOJh3nNuA'},
+  {flag:'🍲', tag:'HOTPOT · 麻辣鍋', dish:'手工麻辣鍋物', brand:'手工殿麻辣鍋物', rating:4.9, pid:'ChIJzdC1klSrQjQRCM9hRORZX18'},
+  {flag:'🍛', tag:'THAILAND · 泰式', dish:'泰式海南雞飯', brand:'銀泰泰式海南雞飯', rating:4.9, pid:'ChIJM6t9T3irQjQRDB_wDoxPw8o'},
+  {flag:'🌶️', tag:'THAILAND · 泰式', dish:'打拋豬 / 綠咖哩', brand:'心泰GLin', rating:4.7, pid:'ChIJBaeprKirQjQRf2fWLcyNUoU'},
+  {flag:'🍛', tag:'THAILAND · 泰式', dish:'月亮蝦餅 / 泰式咖哩', brand:'Pikul 信義象山店', rating:4.5, pid:'ChIJ1eXQShWrQjQR-9Ev_CR9KkI'},
+  {flag:'🦐', tag:'THAILAND · 泰式', dish:'月亮蝦餅 / 打拋豬', brand:'VELA Thai Cuisine', rating:4.8, pid:'ChIJm7V6ug2rQjQRKgElo4h1J-A'},
+  {flag:'🔥', tag:'TAIWAN · 熱炒', dish:'台式熱炒拼盤', brand:'吟鮮熱炒食堂', rating:4.9, pid:'ChIJq1i1SBKrQjQR_SF19SUBoM0'},
+  {flag:'🦆', tag:'HK/CN · 港點', dish:'烤鴨 / 港式點心', brand:'芯聚苑 烤鴨港點', rating:4.5, pid:'ChIJLyleWQCrQjQROLcnNgBHhcw'},
+  {flag:'🍚', tag:'HK · 港式', dish:'黑椒雞扒飯 / 港式奶茶', brand:'Kowloon HKCafe', rating:4.4, pid:'ChIJo3ClvoarQjQR3W13Dy-xMh8'},
+  {flag:'🍱', tag:'TAIWAN · 台菜便當', dish:'商業便當 / 包場台菜', brand:'大吉團 Lucky Bowl', rating:4.8, pid:'ChIJe_eHWwCrQjQR5C3mV1-PJms'},
+  {flag:'🍜', tag:'VIETNAM · 越式', dish:'酸辣牛肉河粉', brand:'Y Đình 越南料理', rating:4.6, pid:'ChIJt1iua7arQjQRg9pQ264yhT4'},
+  {flag:'🍜', tag:'VIETNAM · 越式', dish:'河粉 / 越式火鍋', brand:'Phở Xin Yue', rating:4.4, pid:'ChIJNeM_pZ-rQjQRVwonJKV4osM'},
+  {flag:'🥖', tag:'VIETNAM · 越式', dish:'越式河粉 / 法國麵包', brand:'武鼎越豐', rating:4.2, pid:'ChIJLdVhiLyrQjQRZF22uh1818M'},
 ];
 
 let lastIndex = -1;
@@ -339,7 +377,9 @@ function renderCard(item){
   document.getElementById('cardFlag').textContent = item.flag;
   document.getElementById('cardTag').textContent = item.tag;
   document.getElementById('cardDish').textContent = item.dish;
-  document.getElementById('cardBrand').innerHTML = '推薦品牌：<b>' + item.brand + '</b>';
+  document.getElementById('cardBrand').innerHTML = '推薦餐廳：<b>' + item.brand + '</b>';
+  document.getElementById('cardRating').innerHTML = '⭐ ' + item.rating.toFixed(1) + ' <span>· 信義區</span>';
+  document.getElementById('cardMap').href = 'https://www.google.com/maps/place/?q=place_id:' + item.pid;
 }
 
 function spin(){
