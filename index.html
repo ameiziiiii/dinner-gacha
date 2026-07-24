@@ -274,7 +274,7 @@
 
   <div class="eyebrow">Dinner Decision Machine</div>
   <h1>今晚吃<span>什麼</span>？</h1>
-  <div class="sub">轉一下，交給緣分決定 — 29 個信義區真實選項，含麥當勞、Subway、肯德基、達美樂等連鎖，以及鹹水雞、便當等外帶美食</div>
+  <div class="sub">選擇困難退散，轉一下決定今晚吃什麼 🍽️</div>
 
   <div class="machine-wrap">
     <div class="dome" id="dome">
@@ -289,8 +289,8 @@
       <div class="capsule c9"></div>
     </div>
     <div class="base">
-      <button class="knob" id="crankBtn">轉一下</button>
-      <div class="slot">出口 · OUTPUT</div>
+      <button class="knob" id="crankBtn">開吃</button>
+      <div class="slot">晚餐出現啦 · OUTPUT</div>
     </div>
   </div>
 
@@ -300,7 +300,7 @@
     <span class="flag" id="cardFlag">🍜</span>
     <div class="tag" id="cardTag">JAPAN · 日式</div>
     <div class="dish" id="cardDish">豚骨拉麵</div>
-    <div class="brand" id="cardBrand">推薦餐廳：<b>一風堂</b></div>
+    <div class="brand" id="cardBrand">今晚吃這家：<b>一風堂</b></div>
     <div class="rating" id="cardRating">⭐ 4.8 <span>· 信義區</span></div>
     <br>
     <a class="map-link" id="cardMap" href="#" target="_blank" rel="noopener">在地圖上查看</a>
@@ -315,39 +315,39 @@
 <script>
 // 信義區真實餐廳/店家清單（資料取自 Google 地圖，含評分；全數可外帶）
 const pool = [
-  {flag:'🍣', tag:'JAPAN · 日式丼飯', dish:'生魚片丼飯', brand:'魚躍日式料理 北醫店', rating:4.8, pid:'ChIJ3TgUKLWrQjQRdyNCbtxTnVM'},
-  {flag:'🍣', tag:'JAPAN · 日式壽司', dish:'握壽司 / 生魚片丼', brand:'林居sushi 永吉店', rating:4.8, pid:'ChIJZSnJbYWrQjQRl8oNo7MZKg0'},
-  {flag:'🥩', tag:'JAPAN · 日式燒肉丼', dish:'燒肉牛丼', brand:'GYUU NIKU ステーキ専門店', rating:4.6, pid:'ChIJhxtvkqOrQjQRbbpjh4uldU8'},
-  {flag:'🍛', tag:'JAPAN · 日式咖哩', dish:'炸豬排咖哩飯', brand:'羅本家咖哩 信義店', rating:4.9, pid:'ChIJaQ1CwlSrQjQRorOr1NX638w'},
-  {flag:'🍛', tag:'JAPAN · 日式咖哩', dish:'唐揚雞咖哩飯', brand:'Curry For Peace', rating:4.7, pid:'ChIJdbSSOMqrQjQRJA2KtQ4zaSE'},
-  {flag:'🍗', tag:'KOREA · 韓式燉雞', dish:'韓式燉雞', brand:'Twozzim 韓國燉雞', rating:4.9, pid:'ChIJJ4zWvACrQjQRfklXErrIHi0'},
-  {flag:'🍔', tag:'USA · 美式漢堡', dish:'手工牛肉漢堡', brand:'Awesome Burger', rating:4.7, pid:'ChIJoeYaSrmrQjQRl7CUbo2Pluc'},
-  {flag:'🍗', tag:'USA · 美式漢堡', dish:'炸雞漢堡配鬆餅', brand:'BURGER OUT', rating:4.6, pid:'ChIJAytZQDirQjQRgE8YUFmgaMY'},
-  {flag:'🍔', tag:'USA · 美式漢堡', dish:'經典起司漢堡', brand:"Lin's Burger", rating:4.5, pid:'ChIJZWIJ8WirQjQRlgqCl4LX-tI'},
-  {flag:'🍔', tag:'USA · 美式漢堡', dish:'炭烤厚切漢堡', brand:'BURNT BURGER SOCIAL CLUB', rating:4.4, pid:'ChIJzYnsPQCrQjQRtxhA1aMxwDo'},
-  {flag:'🍕', tag:'ITALY · 義式披薩', dish:'拿坡里手工披薩', brand:'披薩3次方', rating:4.7, pid:'ChIJc2bzzPCrQjQRLbtiNwu4-Rg'},
-  {flag:'🍚', tag:'TAIWAN · 台式', dish:'滷肉飯 / 竹筍排骨湯', brand:'春發號滷肉飯', rating:4.4, pid:'ChIJi255bOmrQjQRI_ZZTaozvF8'},
-  {flag:'🧊', tag:'TAIWAN · 台式小吃', dish:'臭豆腐 / 米血糕', brand:'正純小吃店', rating:4.6, pid:'ChIJmWcpDaqrQjQRBZRq3SnVGGo'},
-  {flag:'🍛', tag:'THAILAND · 泰式', dish:'泰式海南雞飯', brand:'銀泰泰式海南雞飯', rating:4.9, pid:'ChIJM6t9T3irQjQRDB_wDoxPw8o'},
-  {flag:'🦆', tag:'HK/CN · 港點烤鴨', dish:'烤鴨 / 港式點心', brand:'芯聚苑 烤鴨港點', rating:4.5, pid:'ChIJLyleWQCrQjQROLcnNgBHhcw'},
-  {flag:'🍱', tag:'TAIWAN · 台菜便當', dish:'商業便當 / 包場台菜', brand:'大吉團 Lucky Bowl', rating:4.8, pid:'ChIJe_eHWwCrQjQR5C3mV1-PJms'},
-  {flag:'🍜', tag:'VIETNAM · 越式河粉', dish:'酸辣牛肉河粉', brand:'Y Đình 越南料理', rating:4.6, pid:'ChIJt1iua7arQjQRg9pQ264yhT4'},
-  {flag:'🍟', tag:'CHAIN · 連鎖速食', dish:'大麥克全餐', brand:"McDonald's 莊敬路店", rating:3.8, pid:'ChIJjfzEsLCrQjQRN8ctcgH9pxQ'},
-  {flag:'🥪', tag:'CHAIN · 連鎖潛艇堡', dish:'潛艇堡套餐', brand:'Subway 松德店', rating:3.4, pid:'ChIJQbeYqqarQjQRay6wJlRKglA'},
-  {flag:'🍗', tag:'CHAIN · 連鎖速食', dish:'原味炸雞桶', brand:'KFC 莊敬店', rating:3.5, pid:'ChIJqzYI6rSrQjQRmVATBSAx7VE'},
-  {flag:'🍔', tag:'CHAIN · 連鎖漢堡', dish:'米漢堡套餐', brand:'MOS BURGER TWTC店', rating:3.6, pid:'ChIJ7RVlNLqrQjQRDZ2U40PhRnM'},
-  {flag:'🍕', tag:'CHAIN · 連鎖披薩', dish:'雙層起司披薩', brand:"達美樂 Domino's Pizza", rating:4.1, pid:'ChIJCeKi16KrQjQRQTaO1gmsGgc'},
-  {flag:'🍗', tag:'TAIWAN · 鹽酥雞/滷味', dish:'鹽酥雞拼盤', brand:'台灣香鹽酥雞', rating:4.8, pid:'ChIJYZneYACrQjQRR2Ht0FEC6eI'},
-  {flag:'🥗', tag:'TAIWAN · 鹹水雞', dish:'鹹水雞切盤', brand:'極品鹽水雞', rating:4.3, pid:'ChIJX5s9vvarQjQR6OtkjFwCd1U'},
-  {flag:'🥗', tag:'TAIWAN · 鹹水雞', dish:'鹹水雞切盤', brand:'唸嘴鹹水雞', rating:4.0, pid:'ChIJ_aZue0arQjQRG0uyhdeVz88'},
-  {flag:'🍱', tag:'TAIWAN · 便當', dish:'招牌炸雞腿便當', brand:'阿布便當', rating:5.0, pid:'ChIJ8eu-QeurQjQRUvtmPVoM2vo'},
-  {flag:'🍱', tag:'TAIWAN · 便當', dish:'商務便當 / 客製餐盒', brand:'杉盒便當製所', rating:4.5, pid:'ChIJW8lsYrKrQjQRsSGSN6xbONI'},
-  {flag:'🍱', tag:'JAPAN · 日式便當', dish:'牛肉丼便當', brand:'MAKOTO丼 日式便當專賣', rating:4.7, pid:'ChIJXRSy6qGrQjQR7gS05ywy2f0'},
-  {flag:'🍱', tag:'TAIWAN · 烤肉飯', dish:'烤肉飯便當', brand:'犇野烤肉飯', rating:4.3, pid:'ChIJ0baw1BmrQjQRs_1iZN4ObJ8'},
+{flag:'🍱', tag:'TAIWAN · 便當', dish:'招牌炸雞腿便當', brand:'阿布便當', rating:5.0, pid:'ChIJ8eu-QeurQjQRUvtmPVoM2vo'},
+{flag:'🍱', tag:'TAIWAN · 便當', dish:'排骨飯 / 雞腿飯', brand:'池上便當', rating:4.5, pid:''},
+{flag:'🍱', tag:'TAIWAN · 便當', dish:'燒肉飯便當', brand:'犇野烤肉飯', rating:4.3, pid:'ChIJ0baw1BmrQjQRs_1iZN4ObJ8'},
+{flag:'🍱', tag:'JAPAN · 日式便當', dish:'牛肉丼便當', brand:'MAKOTO丼 日式便當專賣', rating:4.7, pid:'ChIJXRS6qGrQjQR7gS05ywy2f0'},
+{flag:'🍚', tag:'TAIWAN · 滷肉飯', dish:'滷肉飯 / 排骨湯', brand:'春發號滷肉飯', rating:4.4, pid:'ChIJi255bOmrQjQRI_ZZTaozvF8'},
+{flag:'🥟', tag:'TAIWAN · 水餃', dish:'水餃 / 酸辣湯', brand:'八方雲集', rating:4.3, pid:''},
+{flag:'🥟', tag:'TAIWAN · 鍋貼', dish:'鍋貼 / 玉米濃湯', brand:'四海遊龍', rating:4.2, pid:''},
+{flag:'🍜', tag:'TAIWAN · 牛肉麵', dish:'紅燒牛肉麵', brand:'老地方牛肉麵', rating:4.5, pid:''},
+{flag:'🍜', tag:'TAIWAN · 麵食', dish:'乾麵 / 餛飩湯', brand:'老虎醬溫州大餛飩', rating:4.7, pid:''},
+{flag:'🍲', tag:'TAIWAN · 湯品', dish:'滷味 / 湯品', brand:'可口滷味', rating:4.5, pid:''},
+{flag:'🍢', tag:'TAIWAN · 滷味', dish:'滷味拼盤 / 王子麵', brand:'傳統滷味', rating:4.4, pid:''},
+{flag:'🍗', tag:'TAIWAN · 炸物', dish:'鹽酥雞拼盤', brand:'台灣香鹽酥雞', rating:4.8, pid:'ChIJYZneYACrQjQRR2Ht0FEC6eI'},
+{flag:'🥗', tag:'TAIWAN · 鹹水雞', dish:'鹹水雞切盤', brand:'極品鹽水雞', rating:4.3, pid:'ChIJX5s9vvarQjQR6OtkjFwCd1U'},
+{flag:'🌶️', tag:'TAIWAN · 麻辣燙', dish:'麻辣燙 / 麻辣乾拌', brand:'麻辣燙專賣', rating:4.5, pid:''},
+{flag:'🍛', tag:'JAPAN · 咖哩', dish:'炸豬排咖哩飯', brand:'羅本家咖哩 信義店', rating:4.9, pid:'ChIJaQ1CwlSrQjQRorOr1NX638w'},
+{flag:'🍛', tag:'JAPAN · 咖哩', dish:'唐揚雞咖哩飯', brand:'Curry For Peace', rating:4.7, pid:'ChIJdbSSOMqrQjQRJA2KtQ4zaSE'},
+{flag:'🍣', tag:'JAPAN · 丼飯', dish:'生魚片丼飯', brand:'魚躍日式料理 北醫店', rating:4.8, pid:'ChIJ3TgUKLWrQjQRdyNCbtxTnVM'},
+{flag:'🍣', tag:'JAPAN · 壽司', dish:'握壽司 / 生魚片', brand:'林居sushi 永吉店', rating:4.8, pid:'ChIJZSnJbYWrQjQRl8oNo7MZKg0'},
+{flag:'🍜', tag:'JAPAN · 拉麵', dish:'豚骨拉麵', brand:'一風堂', rating:4.5, pid:''},
+{flag:'🥩', tag:'JAPAN · 燒肉', dish:'燒肉牛丼', brand:'GYUU NIKU ステーキ専門店', rating:4.6, pid:'ChIJhxtvkqOrQjQRbbpjh4uldU8'},
+{flag:'🍗', tag:'KOREA · 韓式', dish:'韓式燉雞', brand:'Twozzim 韓國燉雞', rating:4.9, pid:'ChIJJ4zWvACrQjQRfklXErrIHi0'},
+{flag:'🍗', tag:'KOREA · 炸雞', dish:'韓式炸雞 / 年糕', brand:'起家雞 Chicken Plus', rating:4.7, pid:''},
+{flag:'🍛', tag:'THAILAND · 泰式', dish:'海南雞飯', brand:'銀泰泰式海南雞飯', rating:4.9, pid:'ChIJM6t9T3irQjQRDB_wDoxPw8o'},
+{flag:'🍜', tag:'VIETNAM · 越式', dish:'酸辣牛肉河粉', brand:'Y Đình 越南料理', rating:4.6, pid:'ChIJt1iua7arQjQRg9pQ264yhT4'},
+{flag:'🍔', tag:'USA · 漢堡', dish:'手工牛肉漢堡', brand:'Awesome Burger', rating:4.7, pid:'ChIJoeYaSrmrQjQRl7CUbo2Pluc'},
+{flag:'🍕', tag:'ITALY · 披薩', dish:'拿坡里披薩', brand:'披薩3次方', rating:4.7, pid:'ChIJc2bzzPCrQjQRLbtiNwu4-Rg'},
+{flag:'🍟', tag:'CHAIN · 速食', dish:'大麥克全餐', brand:"McDonald's", rating:3.8, pid:''},
+{flag:'🍗', tag:'CHAIN · 炸雞', dish:'原味炸雞桶', brand:'KFC', rating:3.5, pid:''},
+{flag:'🍕', tag:'CHAIN · 披薩', dish:'雙層起司披薩', brand:"Domino's Pizza", rating:4.1, pid:''},
+{flag:'🥪', tag:'CHAIN · 潛艇堡', dish:'潛艇堡套餐', brand:'Subway', rating:3.4, pid:''}
 ];
 
 let lastIndex = -1;
-let rerollUsed = false;
 
 const dome = document.getElementById('dome');
 const crankBtn = document.getElementById('crankBtn');
@@ -372,7 +372,9 @@ function renderCard(item){
   document.getElementById('cardDish').textContent = item.dish;
   document.getElementById('cardBrand').innerHTML = '推薦餐廳：<b>' + item.brand + '</b>';
   document.getElementById('cardRating').innerHTML = '⭐ ' + item.rating.toFixed(1) + ' <span>· 信義區</span>';
-  document.getElementById('cardMap').href = 'https://www.google.com/maps/place/?q=place_id:' + item.pid;
+  document.getElementById('cardMap').href = item.pid 
+? 'https://www.google.com/maps/place/?q=place_id:' + item.pid
+: 'https://www.google.com/maps/search/' + encodeURIComponent(item.brand);
 }
 
 function spin(){
@@ -401,10 +403,15 @@ function spin(){
       card.classList.add('show');
       actions.style.display = 'flex';
       crankBtn.disabled = false;
-      crankBtn.textContent = '轉一下';
-      rerollUsed = false;
-      againBtn.textContent = '不滿意，再轉一次';
-      againBtn.disabled = false;
+crankBtn.textContent = '轉一下';
+
+if(!rerollUsed){
+  againBtn.textContent = '不滿意，再轉一次';
+  againBtn.disabled = false;
+}else{
+  againBtn.textContent = '今晚就決定它 😋';
+  againBtn.disabled = true;
+}
     }, 500);
   }, 900);
 }
